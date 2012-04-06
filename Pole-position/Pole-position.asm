@@ -6,8 +6,10 @@
  *			Anders Østergaard Hansen, 
  *			Andreas Baldur Hansen,
  *			Morten Markmann,  
- *			Rasmus Strong Jensen
+ *			Rasmus Strong Jensen,
  *			Yonas Moa Alizadeh
  */ 
+
+ .INCLUDE "M32ADEF.INC"
 
 
