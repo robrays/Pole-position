@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>5.1</ProjectVersion>
+    <ToolchainName>com.Atmel.AVRAssembler</ToolchainName>
+    <ProjectGuid>{cac622e8-dff1-449a-a01f-7fe89a0049be}</ProjectGuid>
+    <avrdeviceseries>none</avrdeviceseries>
+    <avrdevice>ATmega32A</avrdevice>
+    <OutputFileName>$(MSBuildProjectName)</OutputFileName>
+    <OutputFileExtension>.obj</OutputFileExtension>
+    <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
+    <Language>ASSEMBLY</Language>
+    <AssemblyName>Pole-position</AssemblyName>
+    <Name>Pole-position</Name>
+    <RootNamespace>Pole-position</RootNamespace>
+    <EntryFile>$(MSBuildProjectDirectory)\Pole-position.asm</EntryFile>
+    <ToolchainFlavour>Native</ToolchainFlavour>
+    <AsfVersion>2.11.1</AsfVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <ToolchainSettings>
+      <AvrAssembler>
+  <avrasm.assembler.general.IncludeFile>($IncludeFile)</avrasm.assembler.general.IncludeFile>
+</AvrAssembler>
+    </ToolchainSettings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <ToolchainSettings>
+      <AvrAssembler>
+  <avrasm.assembler.general.IncludeFile>($IncludeFile)</avrasm.assembler.general.IncludeFile>
+</AvrAssembler>
+    </ToolchainSettings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Pole-position.asm">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Assembler.targets" />
+</Project>
