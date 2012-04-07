@@ -42,7 +42,7 @@
 	.ORG INT0addr	; 
 		RJMP INT0_INT_HANDELER
 
-	/* Interupt vector address for Timer2 */
+	/* Interupt vector address for Timer0 */
 	.ORG OVF0addr
 		RJMP TIMER0_INT_HANDLER
 
@@ -99,7 +99,7 @@
 
 	//-------------------------------------------------------------------------------------------------------------
 	//
-	// Start initialising Hall sensor (TIMER2) */
+	// Start initialising Hall sensor (TIMER0) */
 	//
 
 		/*
