@@ -3,7 +3,7 @@
  *
  *  Created: 06-04-2012 19:30:57
  *  Author:
- *			Anders Østergaard Hansen, 
+ *			Anders ï¿½stergaard Hansen, 
  *			Andreas Baldur Hansen,
  *			Morten Markmann,  
  *			Rasmus Strong Jensen,
@@ -85,7 +85,7 @@
 		LDI R16, (( 1 << RXEN ) | ( 1 << RXCIE )  | ( 1 << TXEN ))		; Enables receiever, transmitter and
 		OUT UCSRB, R16													; receiver interupts
 
-		LDI R16, ( 1 << UCSZ1 ) | ( 1 << UCSZ0 )						; Setting character mode
+		LDI R16, (( 1 << UCSZ1 ) | ( 1 << UCSZ0 ) | ( 1 << URSEL ))						; Setting character mode
 		OUT UCSRC, R16													; to 8-bit
 
 		LDI R16, 0x67													; Setting baudrate to 9600 
@@ -125,7 +125,7 @@
 	//
 
 		SBI DDRD, 7											; Making pin 7 on port D an output pin
-		LDI R16, (1 << COM21) | (1 << WGM20) | (1 << CS00)	; Configuring TCCR2 for non inverted phase correct PWM
+		LDI R16, (1 << COM21) | (1 << WGM20) | (1 << CS20)	; Configuring TCCR2 for non inverted phase correct PWM
 		OUT TCCR2, R16										; and no prescaling 
 	
 		LDI DUTY_CYCLE, 0									; Configuring 0% duty cycle: 255*0/100 = 0 			
