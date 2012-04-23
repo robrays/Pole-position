@@ -21,19 +21,22 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrAssembler>
-  <avrasm.assembler.general.IncludeFile>($IncludeFile)</avrasm.assembler.general.IncludeFile>
-</AvrAssembler>
+        <avrasm.assembler.general.IncludeFile>($IncludeFile)</avrasm.assembler.general.IncludeFile>
+      </AvrAssembler>
     </ToolchainSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
       <AvrAssembler>
-  <avrasm.assembler.general.IncludeFile>($IncludeFile)</avrasm.assembler.general.IncludeFile>
-</AvrAssembler>
+        <avrasm.assembler.general.IncludeFile>($IncludeFile)</avrasm.assembler.general.IncludeFile>
+      </AvrAssembler>
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Pole-position.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="slotcar.inc">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

@@ -1,0 +1,82 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.1.51</VERSION>
+ <DEVICE>"ATmega32A"</DEVICE>
+ <WORKING_DIR>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:\Program Files (x86)\Atmel\AVR Studio 5.1\extensions\Atmel\AVRAssembler\2.1.51.17\AvrAssembler/Include</DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:\Program Files (x86)\Atmel\AVR Studio 5.1\extensions\Atmel\AVRAssembler\2.1.51.17\AvrAssembler/Include\m32adef.inc</FILE>
+  <FILE>C:\Program Files (x86)\Atmel\AVR Studio 5.1\extensions\Atmel\AVRAssembler\2.1.51.17\AvrAssembler/Include\M32ADEF.INC</FILE>
+  <FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\slotcar.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Debug/Pole-position.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Debug/Pole-position.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Debug\Pole-position.map</FILE>
+  <FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Debug\Pole-position.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <INIT><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>93</LINE></INIT>
+  <SERIAL_DATA_RECEIVED_HANDELER><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>299</LINE></SERIAL_DATA_RECEIVED_HANDELER>
+  <INTERRUPT0_HANDELER><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>465</LINE></INTERRUPT0_HANDELER>
+  <INTERRUPT1_HANDELER><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>480</LINE></INTERRUPT1_HANDELER>
+  <INTERRUPT2_HANDELER><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>506</LINE></INTERRUPT2_HANDELER>
+  <OC1A_INTERRUPT_HANDLER><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>534</LINE></OC1A_INTERRUPT_HANDLER>
+  <INITIALIZE_SERIAL_COMMUNICATION><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>174</LINE></INITIALIZE_SERIAL_COMMUNICATION>
+  <INITIALIZE_MOTOR_PWM><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>249</LINE></INITIALIZE_MOTOR_PWM>
+  <INITIALIZE_TIMER1><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>223</LINE></INITIALIZE_TIMER1>
+  <INITIALIZE_ELECTRO_MAGNET_PWM><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>202</LINE></INITIALIZE_ELECTRO_MAGNET_PWM>
+  <INITIALIZE_EXTERNAL_INTERRUPTS><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>272</LINE></INITIALIZE_EXTERNAL_INTERRUPTS>
+  <MAIN><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>157</LINE></MAIN>
+  <DELAY><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>709</LINE></DELAY>
+  <SDRH_STEP1><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>306</LINE></SDRH_STEP1>
+  <SDRH_STEP2><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>316</LINE></SDRH_STEP2>
+  <SDRH_STEP1_1><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>312</LINE></SDRH_STEP1_1>
+  <SDRH_STEP3><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>320</LINE></SDRH_STEP3>
+  <SDRH_STEP4><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>347</LINE></SDRH_STEP4>
+  <SDRH_STEP3_1><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>325</LINE></SDRH_STEP3_1>
+  <SDRH_STEP3_2><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>334</LINE></SDRH_STEP3_2>
+  <WAIT_FOR_INPUT><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>776</LINE></WAIT_FOR_INPUT>
+  <SDRH_STEP3_3><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>343</LINE></SDRH_STEP3_3>
+  <CLRCOMSR><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>738</LINE></CLRCOMSR>
+  <SDRH_STEP5><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>381</LINE></SDRH_STEP5>
+  <SDRH_STEP4_1><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>352</LINE></SDRH_STEP4_1>
+  <SDRH_STEP4_2><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>360</LINE></SDRH_STEP4_2>
+  <SDRH_STEP4_3><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>368</LINE></SDRH_STEP4_3>
+  <UPDATE_DUTYCYCLE><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>627</LINE></UPDATE_DUTYCYCLE>
+  <SDRH_STEP4_4><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>377</LINE></SDRH_STEP4_4>
+  <AUTOMODE><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>570</LINE></AUTOMODE>
+  <SDRH_STEP6><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>451</LINE></SDRH_STEP6>
+  <SDRH_STEP5_1><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>387</LINE></SDRH_STEP5_1>
+  <SDRH_STEP5_2><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>411</LINE></SDRH_STEP5_2>
+  <SDRH_STEP5_1_1><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>392</LINE></SDRH_STEP5_1_1>
+  <SDRH_STEP5_1_2><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>402</LINE></SDRH_STEP5_1_2>
+  <SDRH_STEP5_3><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>441</LINE></SDRH_STEP5_3>
+  <SDRH_STEP5_2_1><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>416</LINE></SDRH_STEP5_2_1>
+  <SDRH_STEP5_2_2><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>430</LINE></SDRH_STEP5_2_2>
+  <OptoON2><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>485</LINE></OptoON2>
+  <TRNSMT><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>759</LINE></TRNSMT>
+  <DONE><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>518</LINE></DONE>
+  <IND_OFF><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>550</LINE></IND_OFF>
+  <IND_ON><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>545</LINE></IND_ON>
+  <M_PWM><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>589</LINE></M_PWM>
+  <E_PWM><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>606</LINE></E_PWM>
+  <DIVISION><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>663</LINE></DIVISION>
+  <DIV><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>675</LINE></DIV>
+  <subtr><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>684</LINE></subtr>
+  <RETURN><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>691</LINE></RETURN>
+  <D1><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>715</LINE></D1>
+  <CALC_COMPARE_MATCH_LOW_BYTE><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>795</LINE></CALC_COMPARE_MATCH_LOW_BYTE>
+  <CALC_COMPARE_MATCH_HIGH_BYTE><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>830</LINE></CALC_COMPARE_MATCH_HIGH_BYTE>
+  <INDRL_NO_OVERFLOW><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>811</LINE></INDRL_NO_OVERFLOW>
+  <INDRL_OVERFLOW><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>816</LINE></INDRL_OVERFLOW>
+  <INDRH_NO_OVERFLOW><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>846</LINE></INDRH_NO_OVERFLOW>
+  <INDRH_OVERFLOW><FILE>C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm</FILE><LINE>851</LINE></INDRH_OVERFLOW>
+ </LABELS>
+</ASSEMBLER_INFO>
