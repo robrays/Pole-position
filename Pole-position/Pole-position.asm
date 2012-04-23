@@ -225,6 +225,12 @@
 		OUT		OCR1AH, temp
 		OUT		OCR1AL, temp
 
+		// MISSING CONFIGURATION OF INDRL AND INDRH WHICH HOLDS THE NEXT INPUT BYTE DELAY VALUE
+		//LDI	R16, 0x0
+		//STS	INDRL, R16
+		//LDI	R16, 0x0
+		//STS	INDRH, R16
+
 		LDI		temp, 0x00								; Compare match mode, 1024 prescaller. If no prescaller: CS12 = 0
 		OUT		TCCR1A, temp
 		LDI		temp, (1<<WGM12)|(1<<CS12)|(1<<CS10)

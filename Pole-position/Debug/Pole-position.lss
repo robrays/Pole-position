@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.51  C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm Tue Apr 24 01:33:31 2012
+AVRASM ver. 2.1.51  C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm Tue Apr 24 01:40:43 2012
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\AVR Studio 5.1\extensions\Atmel\AVRAssembler\2.1.51.17\AvrAssembler/Include\m32adef.inc'
 C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm(13): Including file 'C:\Program Files (x86)\Atmel\AVR Studio 5.1\extensions\Atmel\AVRAssembler\2.1.51.17\AvrAssembler/Include\M32ADEF.INC'
@@ -1160,6 +1160,12 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
 00012d ef1f      		LDI		temp, 0xFF								; Compare match occours when TCNT1 reaches 0xFFFF
 00012e bd1b      		OUT		OCR1AH, temp
 00012f bd1a      		OUT		OCR1AL, temp
+                 
+                 		// MISSING CONFIGURATION OF INDRL AND INDRH WHICH HOLDS THE NEXT INPUT BYTE DELAY VALUE
+                 		//LDI	R16, 0x0
+                 		//STS	INDRL, R16
+                 		//LDI	R16, 0x0
+                 		//STS	INDRH, R16
                  
 000130 e010      		LDI		temp, 0x00								; Compare match mode, 1024 prescaller. If no prescaller: CS12 = 0
 000131 bd1f      		OUT		TCCR1A, temp
