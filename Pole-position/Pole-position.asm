@@ -225,11 +225,10 @@
 		OUT		OCR1AH, temp
 		OUT		OCR1AL, temp
 
-		// MISSING CONFIGURATION OF INDRL AND INDRH WHICH HOLDS THE NEXT INPUT BYTE DELAY VALUE
-		//LDI	R16, 0x0
-		//STS	INDRL, R16
-		//LDI	R16, 0x0
-		//STS	INDRH, R16
+		LDI	R16, 0x09									; Configuring the next input byte delay to 1 sec
+		STS	INDRL, R16									; 16Mhz/1024 = 15625, 1/15625 = 64?s, 1/64?s = 15625.0
+		LDI	R16, 0x3D									; So Timer1 has to count 15625 clocks for 1 second with
+		STS	INDRH, R16									; a prescaking of 1024
 
 		LDI		temp, 0x00								; Compare match mode, 1024 prescaller. If no prescaller: CS12 = 0
 		OUT		TCCR1A, temp
@@ -334,6 +333,8 @@
 				BRNE	SDRH_STEP3_2					; If read udr is 0x55, type is of SET
 				LDI		R16, ((1 << TYP0) | (0 << TYP1)); Set the TYP flags to the correct combination
 				STS		COMSR, R16						; and update COMSR
+				LDI		TXreg, 'S'						; Notifiy of SET type thourgh serial connection
+				CALL	TRNSMT							;
 				CALL	WAIT_FOR_INPUT					; Start the input delay for next control byte
 				RETI									; Return from where we were interruptet and enable interrupts
 
@@ -342,6 +343,8 @@
 				CPI		R16, 0xAA						; 
 				BRNE	SDRH_STEP3_3					; If read udr is 0xAA, type is of GET
 				LDI		R16, ((0 << TYP0) | (1 << TYP1)); Set the TYP flags to the correct combination
+				LDI		TXreg, 'G'						; Notifiy of GET type serial connection
+				CALL	TRNSMT							;
 				STS		COMSR, R16						; and update COMSR
 				CALL	WAIT_FOR_INPUT					; Start the input delay for next control byte
 				RETI									; Return from where we were interruptet and enable interrupts
@@ -360,6 +363,8 @@
 				CPI		R16, 0x10						; 
 				BRNE	SDRH_STEP4_2					; If read udr is 0x10, command is START
 				LDI		R16, ((1 << CMD0) | (0 << CMD1)); Set the CMD flags to the correct combination
+				LDI		TXreg, 'S'						; Notifiy of START mode through serial connection
+				CALL	TRNSMT							;
 				STS		COMSR, R16						; and update COMSR
 				CALL	WAIT_FOR_INPUT					; Start the input delay for next control byte
 				RETI									; Return from where we were interruptet and enable interrupts
@@ -367,6 +372,8 @@
 				MOV		R16, temp 						; based on the byte just read in UDR
 				CPI		R16, 0x11						; 
 				BRNE	SDRH_STEP4_3					; If read udr is 0x11, type is of STOP
+				LDI		TXreg, 'Q'						; Notifiy of STOP mode thourgh serial connection
+				CALL	TRNSMT							;
 				LDI		MDCYCLE, 0x0					; Set MDCYCLE to 0%
 				CALL	UPDATE_DUTYCYCLE				; and call UPDATE_DUTYCYCLE
 				CALL	CLRCOMSR						; Clear COMSR
@@ -573,7 +580,9 @@
 // Start AUTOMODE routine
 //
 
-	AUTOMODE:	
+	AUTOMODE:
+		LDI		TXreg, 'A'					; Notifiy if AUTOMODE thourgh serial connection
+		CALL	TRNSMT						;
 		NOP
 
 		RET									; Return
@@ -633,6 +642,9 @@
 	UPDATE_DUTYCYCLE:
 		PUSH	temp						; Push temp to Stack
 		PUSH	temp2						; Push temp2 to Stack
+
+		MOV		TXreg, MDCYCLE				; Notifiy of updating MDCYCLE thourgh serial connection
+		CALL	TRNSMT						;
 
 		LDI		temp, 2						; Multiply DCYCLE with 2
 		MUL 	MDCYCLE, temp			

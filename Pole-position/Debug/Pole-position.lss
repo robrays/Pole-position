@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.51  C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm Tue Apr 24 01:40:43 2012
+AVRASM ver. 2.1.51  C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm Tue Apr 24 14:19:58 2012
 
 [builtin](2): Including file 'C:\Program Files (x86)\Atmel\AVR Studio 5.1\extensions\Atmel\AVRAssembler\2.1.51.17\AvrAssembler/Include\m32adef.inc'
 C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm(13): Including file 'C:\Program Files (x86)\Atmel\AVR Studio 5.1\extensions\Atmel\AVRAssembler\2.1.51.17\AvrAssembler/Include\M32ADEF.INC'
@@ -984,31 +984,31 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  		Interupt vector address for UART Receiver 
                  	*/
                  	.org URXCaddr		
-00001a c129      		RJMP SERIAL_DATA_RECEIVED_HANDELER	
+00001a c12f      		RJMP SERIAL_DATA_RECEIVED_HANDELER	
                  
                  	/* 
                  		Interupt vector address for INT0 - Accelerometer 
                  	*/
                  	.org INT0addr	 
-000002 c1ce      		RJMP INTERRUPT0_HANDELER			
+000002 c1e0      		RJMP INTERRUPT0_HANDELER			
                  
                  	/* 
                  		Interupt vector address for INT0 - Opto sensor 1 and 2 
                  	*/
                  	.org INT1addr	 
-000004 c1ce      		RJMP INTERRUPT1_HANDELER			
+000004 c1e0      		RJMP INTERRUPT1_HANDELER			
                  
                  	/* 
                  		Interupt vector address for INT0 - Hall sensor 
                  	*/
                  	.org INT2addr	 
-000006 c1d7      		RJMP INTERRUPT2_HANDELER			
+000006 c1e9      		RJMP INTERRUPT2_HANDELER			
                  		
                  	/*
                  		Timer 1 Output Compare Match A
                  	*/
                  	.org OC1Aaddr
-00000e 940c 01ec 		JMP OC1A_INTERRUPT_HANDLER						
+00000e 940c 01fe 		JMP OC1A_INTERRUPT_HANDLER						
                  
                  //
                  // End interupt vector configuration
@@ -1056,10 +1056,10 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  		//
                  		
 000104 940e 011c 			CALL	INITIALIZE_SERIAL_COMMUNICATION	; Initialize Serial Communication
-000106 940e 0137 			CALL	INITIALIZE_MOTOR_PWM			; Initialize MOTOR PWM
+000106 940e 013d 			CALL	INITIALIZE_MOTOR_PWM			; Initialize MOTOR PWM
 000108 940e 012d 			CALL 	INITIALIZE_TIMER1				; Initialize Timer1
 00010a 940e 0127 			CALL	INITIALIZE_ELECTRO_MAGNET_PWM	; Initialize ELECTROMAGNET PWM
-00010c 940e 013d 			CALL	INITIALIZE_EXTERNAL_INTERRUPTS	; Initialize INT0 + INT1 + INT2
+00010c 940e 0143 			CALL	INITIALIZE_EXTERNAL_INTERRUPTS	; Initialize INT0 + INT1 + INT2
                  
 00010e 2755      			CLR		HallCounter1					; Clear Hall Counter1 Register
 00010f 2766      			CLR		HallCounter2					; Clear Hall Counter2 Register
@@ -1161,21 +1161,20 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
 00012e bd1b      		OUT		OCR1AH, temp
 00012f bd1a      		OUT		OCR1AL, temp
                  
-                 		// MISSING CONFIGURATION OF INDRL AND INDRH WHICH HOLDS THE NEXT INPUT BYTE DELAY VALUE
-                 		//LDI	R16, 0x0
-                 		//STS	INDRL, R16
-                 		//LDI	R16, 0x0
-                 		//STS	INDRH, R16
+000130 e009      		LDI	R16, 0x09									; Configuring the next input byte delay to 1 sec
+000131 9300 0093 		STS	INDRL, R16									; 16Mhz/1024 = 15625, 1/15625 = 64?s, 1/64?s = 15625.0
+000133 e30d      		LDI	R16, 0x3D									; So Timer1 has to count 15625 clocks for 1 second with
+000134 9300 0092 		STS	INDRH, R16									; a prescaking of 1024
                  
-000130 e010      		LDI		temp, 0x00								; Compare match mode, 1024 prescaller. If no prescaller: CS12 = 0
-000131 bd1f      		OUT		TCCR1A, temp
-000132 e01d      		LDI		temp, (1<<WGM12)|(1<<CS12)|(1<<CS10)
-000133 bd1e      		OUT		TCCR1B, temp
+000136 e010      		LDI		temp, 0x00								; Compare match mode, 1024 prescaller. If no prescaller: CS12 = 0
+000137 bd1f      		OUT		TCCR1A, temp
+000138 e01d      		LDI		temp, (1<<WGM12)|(1<<CS12)|(1<<CS10)
+000139 bd1e      		OUT		TCCR1B, temp
                  		
-000134 e110      		LDI		temp, (1<<OCIE1A)						; Timer 1 Output Compare A Match Interrupt Enable
-000135 bf19      		OUT		TIMSK, temp
+00013a e110      		LDI		temp, (1<<OCIE1A)						; Timer 1 Output Compare A Match Interrupt Enable
+00013b bf19      		OUT		TIMSK, temp
                  
-000136 9508      		RET												; Return to caller
+00013c 9508      		RET												; Return to caller
                  
                  //
                  // End initialising Timer1 
@@ -1189,15 +1188,15 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  		
                  	INITIALIZE_MOTOR_PWM:
-000137 9a8f      		SBI 	DDRD, 7									; OC2 (PD7) Output - Motor
+00013d 9a8f      		SBI 	DDRD, 7									; OC2 (PD7) Output - Motor
                  		
-000138 e030      		LDI		MDCYCLE, 0x00							; Load startvalue of dcycle
-000139 bd33      		OUT 	OCR2, MDCYCLE			
+00013e e030      		LDI		MDCYCLE, 0x00							; Load startvalue of dcycle
+00013f bd33      		OUT 	OCR2, MDCYCLE			
                   		
-00013a e611      		LDI 	temp, (1<<CS20)|(1<<COM21)|(1<<WGM20)	; No prescaler. Phase correct PWM mode. Non-inverted PWM.
-00013b bd15      		OUT 	TCCR2, temp
+000140 e611      		LDI 	temp, (1<<CS20)|(1<<COM21)|(1<<WGM20)	; No prescaler. Phase correct PWM mode. Non-inverted PWM.
+000141 bd15      		OUT 	TCCR2, temp
                  		
-00013c 9508      		RET												; Return to caller
+000142 9508      		RET												; Return to caller
                  
                  //
                  // End initialising Motor PWM 
@@ -1212,16 +1211,16 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	INITIALIZE_EXTERNAL_INTERRUPTS:
-00013d e01f      		LDI		temp, (1<<ISC00)|(1<<ISC01)|(1<<ISC10)|(1<<ISC11)	; Enable rising edge of INT0 and INT1
-00013e bf15      		OUT		MCUCR, temp									
+000143 e01f      		LDI		temp, (1<<ISC00)|(1<<ISC01)|(1<<ISC10)|(1<<ISC11)	; Enable rising edge of INT0 and INT1
+000144 bf15      		OUT		MCUCR, temp									
                  	
-00013f e410      		LDI 	temp, (1<<ISC2)										; Enable rising edge of INT2
-000140 bf14      		OUT 	MCUCSR, temp				
+000145 e410      		LDI 	temp, (1<<ISC2)										; Enable rising edge of INT2
+000146 bf14      		OUT 	MCUCSR, temp				
                  
-000141 ee10      		LDI 	temp, (1<<INT0)|(1<<INT1)|(1<<INT2)					; Enable INT0, INT1 & INT2
-000142 bf1b      		OUT 	GICR, temp					
+000147 ee10      		LDI 	temp, (1<<INT0)|(1<<INT1)|(1<<INT2)					; Enable INT0, INT1 & INT2
+000148 bf1b      		OUT 	GICR, temp					
                  
-000143 9508      		RET															; Return to caller
+000149 9508      		RET															; Return to caller
                  
                  //
                  // End initialising External Interrupt 
@@ -1239,159 +1238,167 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	SERIAL_DATA_RECEIVED_HANDELER:	
-000144 9aa9      		SBI		PortC, 1								; PC1 LED blink
-000145 9ade      		SBI		PortA, 6
-000146 940e 0238 		CALL	DELAY
-000148 98a9      		CBI		PortC, 1
-000149 98de      		CBI		PortA, 6		
+00014a 9aa9      		SBI		PortC, 1								; PC1 LED blink
+00014b 9ade      		SBI		PortA, 6
+00014c 940e 0250 		CALL	DELAY
+00014e 98a9      		CBI		PortC, 1
+00014f 98de      		CBI		PortA, 6		
                  		
                  		SDRH_STEP1:
-00014a 9110 0098 			LDS		temp, COMSR							; Check if IND is flagged in
-00014c 2f01      			MOV		R16, temp 							; COMSR
-00014d 7004      			ANDI	R16,(1 << IND)						; 			
+000150 9110 0098 			LDS		temp, COMSR							; Check if IND is flagged in
+000152 2f01      			MOV		R16, temp 							; COMSR
+000153 7004      			ANDI	R16,(1 << IND)						; 			
                  		
-00014e f419      			BRNE SDRH_STEP2								; If IND is flagged in COMSR
+000154 f419      			BRNE SDRH_STEP2								; If IND is flagged in COMSR
                  			SDRH_STEP1_1:								; unflagged it, if not
-00014f e000      				LDI R16, (0 << IND)						; jump to SDRH_STEP2
-000150 9300 0098 				STS COMSR, R16							;
+000155 e000      				LDI R16, (0 << IND)						; jump to SDRH_STEP2
+000156 9300 0098 				STS COMSR, R16							;
                  
                  		SDRH_STEP2:
-000152 b11c      			IN		temp, UDR							; Read byte from UDR
-000153 5310      			SUBI	temp, 0x30							; Convert from Ascii to HEX
+000158 b11c      			IN		temp, UDR							; Read byte from UDR
+000159 5310      			SUBI	temp, 0x30							; Convert from Ascii to HEX
                  		
                  		SDRH_STEP3:
-000154 9100 0098 			LDS		R16, COMSR							; Check if TYP0 or TYP1 is
-000156 7003      			ANDI	R16, ((1 << TYP0) | (1 << TYP1))	; flagged in COMSR
+00015a 9100 0098 			LDS		R16, COMSR							; Check if TYP0 or TYP1 is
+00015c 7003      			ANDI	R16, ((1 << TYP0) | (1 << TYP1))	; flagged in COMSR
                  			
-000157 f4aa      			BRPL	SDRH_STEP4							; If they are set jump to SDRH_STEP4
+00015d f4da      			BRPL	SDRH_STEP4							; If they are set jump to SDRH_STEP4
                  			SDRH_STEP3_1:								; if they ae not set flag them
-000158 2f01      				MOV		R16, temp 						; based on the byte just read in UDR
-000159 3505      				CPI		R16, 0x55						; 
-00015a f431      				BRNE	SDRH_STEP3_2					; If read udr is 0x55, type is of SET
-00015b e001      				LDI		R16, ((1 << TYP0) | (0 << TYP1)); Set the TYP flags to the correct combination
-00015c 9300 0098 				STS		COMSR, R16						; and update COMSR
-00015e 940e 024f 				CALL	WAIT_FOR_INPUT					; Start the input delay for next control byte
-000160 9518      				RETI									; Return from where we were interruptet and enable interrupts
-                 
-                 			SDRH_STEP3_2:								; Check if type is 0xAA (GET)
-000161 2f01      				MOV		R16, temp 						; 
-000162 3a0a      				CPI		R16, 0xAA						; 
-000163 f431      				BRNE	SDRH_STEP3_3					; If read udr is 0xAA, type is of GET
-000164 e002      				LDI		R16, ((0 << TYP0) | (1 << TYP1)); Set the TYP flags to the correct combination
-000165 9300 0098 				STS		COMSR, R16						; and update COMSR
-000167 940e 024f 				CALL	WAIT_FOR_INPUT					; Start the input delay for next control byte
+00015e 2f01      				MOV		R16, temp 						; based on the byte just read in UDR
+00015f 3505      				CPI		R16, 0x55						; 
+000160 f449      				BRNE	SDRH_STEP3_2					; If read udr is 0x55, type is of SET
+000161 e001      				LDI		R16, ((1 << TYP0) | (0 << TYP1)); Set the TYP flags to the correct combination
+000162 9300 0098 				STS		COMSR, R16						; and update COMSR
+000164 e573      				LDI		TXreg, 'S'						; Notifiy of SET type thourgh serial connection
+000165 940e 0263 				CALL	TRNSMT							;
+000167 940e 0267 				CALL	WAIT_FOR_INPUT					; Start the input delay for next control byte
 000169 9518      				RETI									; Return from where we were interruptet and enable interrupts
                  
+                 			SDRH_STEP3_2:								; Check if type is 0xAA (GET)
+00016a 2f01      				MOV		R16, temp 						; 
+00016b 3a0a      				CPI		R16, 0xAA						; 
+00016c f449      				BRNE	SDRH_STEP3_3					; If read udr is 0xAA, type is of GET
+00016d e002      				LDI		R16, ((0 << TYP0) | (1 << TYP1)); Set the TYP flags to the correct combination
+00016e e477      				LDI		TXreg, 'G'						; Notifiy of GET type serial connection
+00016f 940e 0263 				CALL	TRNSMT							;
+000171 9300 0098 				STS		COMSR, R16						; and update COMSR
+000173 940e 0267 				CALL	WAIT_FOR_INPUT					; Start the input delay for next control byte
+000175 9518      				RETI									; Return from where we were interruptet and enable interrupts
+                 
                  			SDRH_STEP3_3:								; Command is not recognized												
-00016a 940e 0245 				CALL	CLRCOMSR						; Clear COMSR
-00016c 9518      				RETI									; Return from where we were interruptet and enable interrupts
+000176 940e 025d 				CALL	CLRCOMSR						; Clear COMSR
+000178 9518      				RETI									; Return from where we were interruptet and enable interrupts
                  					
                  		SDRH_STEP4:
-00016d 9100 0098 			LDS		R16, COMSR							; Check if CMD0 or CMD1 is
-00016f 700c      			ANDI	R16, ((1 << CMD0) | (1 << CMD1))	; flagged in COMSR
+000179 9100 0098 			LDS		R16, COMSR							; Check if CMD0 or CMD1 is
+00017b 700c      			ANDI	R16, ((1 << CMD0) | (1 << CMD1))	; flagged in COMSR
                  
-000170 f4ea      			BRPL	SDRH_STEP5							; If they are set jump to SDRH_STEP5
+00017c f51a      			BRPL	SDRH_STEP5							; If they are set jump to SDRH_STEP5
                  			SDRH_STEP4_1:								; if they ae not set flag them
-000171 2f01      				MOV		R16, temp 						; based on the byte just read in UDR
-000172 3100      				CPI		R16, 0x10						; 
-000173 f431      				BRNE	SDRH_STEP4_2					; If read udr is 0x10, command is START
-000174 e004      				LDI		R16, ((1 << CMD0) | (0 << CMD1)); Set the CMD flags to the correct combination
-000175 9300 0098 				STS		COMSR, R16						; and update COMSR
-000177 940e 024f 				CALL	WAIT_FOR_INPUT					; Start the input delay for next control byte
-000179 9518      				RETI									; Return from where we were interruptet and enable interrupts
+00017d 2f01      				MOV		R16, temp 						; based on the byte just read in UDR
+00017e 3100      				CPI		R16, 0x10						; 
+00017f f449      				BRNE	SDRH_STEP4_2					; If read udr is 0x10, command is START
+000180 e004      				LDI		R16, ((1 << CMD0) | (0 << CMD1)); Set the CMD flags to the correct combination
+000181 e573      				LDI		TXreg, 'S'						; Notifiy of START mode through serial connection
+000182 940e 0263 				CALL	TRNSMT							;
+000184 9300 0098 				STS		COMSR, R16						; and update COMSR
+000186 940e 0267 				CALL	WAIT_FOR_INPUT					; Start the input delay for next control byte
+000188 9518      				RETI									; Return from where we were interruptet and enable interrupts
                  			SDRH_STEP4_2:	
-00017a 2f01      				MOV		R16, temp 						; based on the byte just read in UDR
-00017b 3101      				CPI		R16, 0x11						; 
-00017c f431      				BRNE	SDRH_STEP4_3					; If read udr is 0x11, type is of STOP
-00017d e030      				LDI		MDCYCLE, 0x0					; Set MDCYCLE to 0%
-00017e 940e 0206 				CALL	UPDATE_DUTYCYCLE				; and call UPDATE_DUTYCYCLE
-000180 940e 0245 				CALL	CLRCOMSR						; Clear COMSR
-000182 9518      				RETI									; Return and enable interrupts
+000189 2f01      				MOV		R16, temp 						; based on the byte just read in UDR
+00018a 3101      				CPI		R16, 0x11						; 
+00018b f449      				BRNE	SDRH_STEP4_3					; If read udr is 0x11, type is of STOP
+00018c e571      				LDI		TXreg, 'Q'						; Notifiy of STOP mode thourgh serial connection
+00018d 940e 0263 				CALL	TRNSMT							;
+00018f e030      				LDI		MDCYCLE, 0x0					; Set MDCYCLE to 0%
+000190 940e 021b 				CALL	UPDATE_DUTYCYCLE				; and call UPDATE_DUTYCYCLE
+000192 940e 025d 				CALL	CLRCOMSR						; Clear COMSR
+000194 9518      				RETI									; Return and enable interrupts
                  			SDRH_STEP4_3:
-000183 2f01      				MOV		R16, temp 						; based on the byte just read in UDR
-000184 3102      				CPI		R16, 0x12						; 
-000185 f429      				BRNE	SDRH_STEP4_4					; If read udr is 0x12, command is AUTOMODE
-000186 940e 01fa 				CALL	AUTOMODE						; and afterwards call CLRSOMR which clears
-000188 940e 0245 				CALL	CLRCOMSR						; COMSR.
-00018a 9518      				RETI									; And finally return to from where we interruptet and
+000195 2f01      				MOV		R16, temp 						; based on the byte just read in UDR
+000196 3102      				CPI		R16, 0x12						; 
+000197 f429      				BRNE	SDRH_STEP4_4					; If read udr is 0x12, command is AUTOMODE
+000198 940e 020c 				CALL	AUTOMODE						; and afterwards call CLRSOMR which clears
+00019a 940e 025d 				CALL	CLRCOMSR						; COMSR.
+00019c 9518      				RETI									; And finally return to from where we interruptet and
                  														; enable interrupts
                  
                  			SDRH_STEP4_4:								; Command is not recognized												
-00018b 940e 0245 				CALL	CLRCOMSR						; Clear COMSR
-00018d 9518      				RETI									; Return from where we were interruptet
+00019d 940e 025d 				CALL	CLRCOMSR						; Clear COMSR
+00019f 9518      				RETI									; Return from where we were interruptet
                  														; and enable interrupts
                  		SDRH_STEP5:
-00018e 9100 0098 			LDS		R16, COMSR							; Check if command is START COMSR
-000190 700c      			ANDI	R16, ((1 << CMD0) | (1 << CMD1))	;
-000191 3004      			CPI		R16, (1 << CMD0)					;
+0001a0 9100 0098 			LDS		R16, COMSR							; Check if command is START COMSR
+0001a2 700c      			ANDI	R16, ((1 << CMD0) | (1 << CMD1))	;
+0001a3 3004      			CPI		R16, (1 << CMD0)					;
                  
-000192 f5e9      			BRNE	SDRH_STEP6							; If command is not START in COMSR
+0001a4 f5e9      			BRNE	SDRH_STEP6							; If command is not START in COMSR
                  			SDRH_STEP5_1:								; Jump to SDRH_STEP6, if command is START
-000193 9100 0098 				LDS		R16, COMSR						; in COMSR, start checking parameters
-000195 7100      				ANDI	R16, (1 << PAR0)
+0001a5 9100 0098 				LDS		R16, COMSR						; in COMSR, start checking parameters
+0001a7 7100      				ANDI	R16, (1 << PAR0)
                  				
-000196 f492      				BRPL	SDRH_STEP5_2					; If PAR0 is flagged jump to SDRH_STEP5_2
+0001a8 f492      				BRPL	SDRH_STEP5_2					; If PAR0 is flagged jump to SDRH_STEP5_2
                  				SDRH_STEP5_1_1:							; Else get parameter byte
-000197 2f01      					MOV		R16, temp					; Reading parameter byte from UDR
-000198 3000      					CPI		R16, 0x0					; Checking if parameter byte is 0
+0001a9 2f01      					MOV		R16, temp					; Reading parameter byte from UDR
+0001aa 3000      					CPI		R16, 0x0					; Checking if parameter byte is 0
                  					
-000199 f431      					BRNE	SDRH_STEP5_1_2				; If parameter byte is not 0 jump to SDRH_STEP5_1_2
-00019a e030      					LDI		MDCYCLE, 0x0				; Else parameter byte is 0 and MDCYCLE is set to 0
-00019b 940e 0206 					CALL 	UPDATE_DUTYCYCLE			; and motor PWM is updated with value in MDCYCLE
-00019d 940e 0245 					CALL	CLRCOMSR					; Clear COMSR
-00019f 9518      					RETI								; Return to where we were interrupted and enable interrupts
+0001ab f431      					BRNE	SDRH_STEP5_1_2				; If parameter byte is not 0 jump to SDRH_STEP5_1_2
+0001ac e030      					LDI		MDCYCLE, 0x0				; Else parameter byte is 0 and MDCYCLE is set to 0
+0001ad 940e 021b 					CALL 	UPDATE_DUTYCYCLE			; and motor PWM is updated with value in MDCYCLE
+0001af 940e 025d 					CALL	CLRCOMSR					; Clear COMSR
+0001b1 9518      					RETI								; Return to where we were interrupted and enable interrupts
                  				
                  				SDRH_STEP5_1_2:							; Parameter byte is greater than 0
-0001a0 2f31      					MOV		MDCYCLE, temp				; Copy parameter byte into MDCYCLE
-0001a1 9110 0098 					LDS		R17, COMSR					; Updating COMSR with the added PAR0 flagged
-0001a3 6110      					ORI		R17, (1 << PAR0)			;
-0001a4 9310 0098 					STS		COMSR, R17					;
+0001b2 2f31      					MOV		MDCYCLE, temp				; Copy parameter byte into MDCYCLE
+0001b3 9110 0098 					LDS		R17, COMSR					; Updating COMSR with the added PAR0 flagged
+0001b5 6110      					ORI		R17, (1 << PAR0)			;
+0001b6 9310 0098 					STS		COMSR, R17					;
                  
-0001a6 940e 024f 					CALL	WAIT_FOR_INPUT				; Start next input byte delay 
-0001a8 9518      					RETI								; Return to where we were interrupted and enable interrupts
+0001b8 940e 0267 					CALL	WAIT_FOR_INPUT				; Start next input byte delay 
+0001ba 9518      					RETI								; Return to where we were interrupted and enable interrupts
                  
                  			SDRH_STEP5_2:
-0001a9 9100 0098 				LDS		R16, COMSR						; Check if PAR1 is flagged in COMSR
-0001ab 7200      				ANDI	R16, (1 << PAR1)				;
+0001bb 9100 0098 				LDS		R16, COMSR						; Check if PAR1 is flagged in COMSR
+0001bd 7200      				ANDI	R16, (1 << PAR1)				;
                  
-0001ac f4d2      				BRPL	SDRH_STEP5_3
+0001be f4d2      				BRPL	SDRH_STEP5_3
                  				SDRH_STEP5_2_1:							; If PAR1 is flagged jump to SDRH_STEP5_3
-0001ad 2f01      					MOV		R16, temp					; Reading parameter byte from UDR
-0001ae 3000      					CPI		R16, 0x0					; Checking if parameter byte is 0
+0001bf 2f01      					MOV		R16, temp					; Reading parameter byte from UDR
+0001c0 3000      					CPI		R16, 0x0					; Checking if parameter byte is 0
                  					
-0001af f459      					BRNE	SDRH_STEP5_2_2				; If parameter byte is not 0 jump to SDRH_STEP5_2_2
-0001b0 e00a      					LDI		R16, 0xA
-0001b1 9f30      					MUL		MDCYCLE, R16				; Else parameter byte is 0 and MDCYCLE multiplied with 10
-0001b2 2d31      					MOV		MDCYCLE, R1					; Moving the multiplied result from R1 to MDCYCLE
-0001b3 9110 0098 					LDS		R17, COMSR					; Updating COMSR with the added PAR1 flagged
-0001b5 6210      					ORI		R17, (1 << PAR1)			;
-0001b6 9310 0098 					STS		COMSR, R17					;
-0001b8 940e 024f 					CALL	WAIT_FOR_INPUT				; Start next input byte delay
-0001ba 9518      					RETI								; Return to where we were interrupted and enable interrupts
+0001c1 f459      					BRNE	SDRH_STEP5_2_2				; If parameter byte is not 0 jump to SDRH_STEP5_2_2
+0001c2 e00a      					LDI		R16, 0xA
+0001c3 9f30      					MUL		MDCYCLE, R16				; Else parameter byte is 0 and MDCYCLE multiplied with 10
+0001c4 2d31      					MOV		MDCYCLE, R1					; Moving the multiplied result from R1 to MDCYCLE
+0001c5 9110 0098 					LDS		R17, COMSR					; Updating COMSR with the added PAR1 flagged
+0001c7 6210      					ORI		R17, (1 << PAR1)			;
+0001c8 9310 0098 					STS		COMSR, R17					;
+0001ca 940e 0267 					CALL	WAIT_FOR_INPUT				; Start next input byte delay
+0001cc 9518      					RETI								; Return to where we were interrupted and enable interrupts
                  				
                  				SDRH_STEP5_2_2:							; Parameter byte is greater than 0
-0001bb e00a      					LDI		R16, 0xA
-0001bc 9f30      					MUL		MDCYCLE, R16				; Multiply MDCYCLE with 10
-0001bd 2d31      					MOV		MDCYCLE, R1					; Copy result to MDCYCLE
-0001be 0f31      					ADD		MDCYCLE, temp				; Add parameter byte just read from UDR
-0001bf 9110 0098 					LDS		R17, COMSR					; Updating COMSR with the added PAR1 flagged
-0001c1 6210      					ORI		R17, (1 << PAR1)			;
-0001c2 9310 0098 					STS		COMSR, R17					;
-0001c4 940e 024f 					CALL	WAIT_FOR_INPUT				; Start next input byte delay 
-0001c6 9518      					RETI								; Return to where we were interrupted and enable interrupts
+0001cd e00a      					LDI		R16, 0xA
+0001ce 9f30      					MUL		MDCYCLE, R16				; Multiply MDCYCLE with 10
+0001cf 2d31      					MOV		MDCYCLE, R1					; Copy result to MDCYCLE
+0001d0 0f31      					ADD		MDCYCLE, temp				; Add parameter byte just read from UDR
+0001d1 9110 0098 					LDS		R17, COMSR					; Updating COMSR with the added PAR1 flagged
+0001d3 6210      					ORI		R17, (1 << PAR1)			;
+0001d4 9310 0098 					STS		COMSR, R17					;
+0001d6 940e 0267 					CALL	WAIT_FOR_INPUT				; Start next input byte delay 
+0001d8 9518      					RETI								; Return to where we were interrupted and enable interrupts
                  
                  			SDRH_STEP5_3:
-0001c7 2f01      				MOV		R16, temp
-0001c8 3000      				CPI		R16, 0x0
+0001d9 2f01      				MOV		R16, temp
+0001da 3000      				CPI		R16, 0x0
                  
-0001c9 f431      				BRNE	SDRH_STEP6						; If the third parameter bute is not zero jump to SDRH_STEP6
-0001ca e634      				LDI		MDCYCLE, 0x64					; Set MDCYCLE to 100% dutycycle
-0001cb 940e 0206 				CALL 	UPDATE_DUTYCYCLE				; Update dutycycle with value in MDCYCLE 
-0001cd 940e 0245 				CALL	CLRCOMSR						; Return to where we were interrupted and enable interrupts
-0001cf 9518      				RETI									
+0001db f431      				BRNE	SDRH_STEP6						; If the third parameter bute is not zero jump to SDRH_STEP6
+0001dc e634      				LDI		MDCYCLE, 0x64					; Set MDCYCLE to 100% dutycycle
+0001dd 940e 021b 				CALL 	UPDATE_DUTYCYCLE				; Update dutycycle with value in MDCYCLE 
+0001df 940e 025d 				CALL	CLRCOMSR						; Return to where we were interrupted and enable interrupts
+0001e1 9518      				RETI									
                  		
                  		SDRH_STEP6:
-0001d0 9518      			RETI								; Return and enable global interrupt
+0001e2 9518      			RETI								; Return and enable global interrupt
                  
                  //
                  // End USART data received interrupt handeler 
@@ -1405,8 +1412,8 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	INTERRUPT0_HANDELER:	
-0001d1 0000      		NOP
-0001d2 9518      		RETI								; Return and enable global interrupt
+0001e3 0000      		NOP
+0001e4 9518      		RETI								; Return and enable global interrupt
                  
                  //
                  // End External interrupt0 handeler 
@@ -1420,19 +1427,19 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	INTERRUPT1_HANDELER:	
-0001d3 9986      		SBIC	PinD, 6			; Opto2 = PD3, Opto1 = PD6
-0001d4 c001      		RJMP	OptoON2
-0001d5 9518      		RETI					; Return and enable global interrupt
+0001e5 9986      		SBIC	PinD, 6			; Opto2 = PD3, Opto1 = PD6
+0001e6 c001      		RJMP	OptoON2
+0001e7 9518      		RETI					; Return and enable global interrupt
                  
                  		OptoON2:
-0001d6 9aa9      			SBI		PortC, 1	; PC1 LED blink
-0001d7 940e 0238 			CALL	DELAY
-0001d9 98a9      			CBI		PortC, 1
+0001e8 9aa9      			SBI		PortC, 1	; PC1 LED blink
+0001e9 940e 0250 			CALL	DELAY
+0001eb 98a9      			CBI		PortC, 1
                  				
-0001da e372      			LDI		TXreg, '2'	; Transmit '2'
-0001db 940e 024b 			CALL 	TRNSMT
+0001ec e372      			LDI		TXreg, '2'	; Transmit '2'
+0001ed 940e 0263 			CALL 	TRNSMT
                  
-0001dd 9518      		RETI					; Return and enable global interrupt
+0001ef 9518      		RETI					; Return and enable global interrupt
                  
                  //
                  // End External interrupt1 handeler 
@@ -1446,21 +1453,21 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	INTERRUPT2_HANDELER:	
-0001de 931f      		PUSH	temp						; Push temp to Stack
-0001df b71f      		IN		temp, SREG					; Push SREG to Stack
-0001e0 931f      		PUSH	temp	
+0001f0 931f      		PUSH	temp						; Push temp to Stack
+0001f1 b71f      		IN		temp, SREG					; Push SREG to Stack
+0001f2 931f      		PUSH	temp	
                  			
-0001e1 9553      		INC		HallCounter1				; Increase HallCounter
-0001e2 ff13      		SBRS	temp, SREG_V				; Test for overflow in HallCounter1
-0001e3 c004      		RJMP	DONE						; If no overflow, jump to DONE, pop SREG and return
-0001e4 9563      		INC		HallCounter2				; If yes, increase HallCounter2 
-0001e5 2f76      		MOV		TXreg, HallCounter2			; Transmit HallCounter2
-0001e6 940e 024b 		CALL 	TRNSMT
+0001f3 9553      		INC		HallCounter1				; Increase HallCounter
+0001f4 ff13      		SBRS	temp, SREG_V				; Test for overflow in HallCounter1
+0001f5 c004      		RJMP	DONE						; If no overflow, jump to DONE, pop SREG and return
+0001f6 9563      		INC		HallCounter2				; If yes, increase HallCounter2 
+0001f7 2f76      		MOV		TXreg, HallCounter2			; Transmit HallCounter2
+0001f8 940e 0263 		CALL 	TRNSMT
                  
-0001e8 911f      		DONE:	POP		temp				; Pop SREG from Stack
-0001e9 bf1f      				OUT		SREG, temp	
-0001ea 911f      				POP		temp				; Pop temp from Stack	
-0001eb 9518      				RETI						; Return and enable global interrupt
+0001fa 911f      		DONE:	POP		temp				; Pop SREG from Stack
+0001fb bf1f      				OUT		SREG, temp	
+0001fc 911f      				POP		temp				; Pop temp from Stack	
+0001fd 9518      				RETI						; Return and enable global interrupt
                  
                  //
                  // End External interrupt2 handeler 
@@ -1474,24 +1481,24 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	OC1A_INTERRUPT_HANDLER:
-0001ec 931f      		PUSH	temp						; Push temp to Stack		
+0001fe 931f      		PUSH	temp						; Push temp to Stack		
                  
-0001ed e110      		LDI		temp, (1<<OCF1A)
-0001ee bf18      		OUT		TIFR, temp				
+0001ff e110      		LDI		temp, (1<<OCF1A)
+000200 bf18      		OUT		TIFR, temp				
                  		
-0001ef 9100 0098 		LDS		R16, COMSR					; Check if next byte input delay flasg IND is set
-0001f1 7004      		ANDI	R16, (1 << IND)
-0001f2 3004      		CPI		R16, (1 << IND)
+000201 9100 0098 		LDS		R16, COMSR					; Check if next byte input delay flasg IND is set
+000203 7004      		ANDI	R16, (1 << IND)
+000204 3004      		CPI		R16, (1 << IND)
                  			
-0001f3 f421      		BRNE	IND_OFF						; If IND is set, clear COMSR 
+000205 f421      		BRNE	IND_OFF						; If IND is set, clear COMSR 
                  		IND_ON:								; and disable Compare Match interrupt on timer 1
-0001f4 940e 0245 			CALL	CLRCOMSR
-0001f6 e100      			LDI		R16, (1 << OCIE1A)
-0001f7 bf09      			OUT		TIMSK, R16
+000206 940e 025d 			CALL	CLRCOMSR
+000208 e100      			LDI		R16, (1 << OCIE1A)
+000209 bf09      			OUT		TIMSK, R16
                  
                  		IND_OFF:
-0001f8 911f      		POP		temp						; Pop temp from Stack
-0001f9 9518      		RETI								; Return and enable global interrupt
+00020a 911f      		POP		temp						; Pop temp from Stack
+00020b 9518      		RETI								; Return and enable global interrupt
                  
                  //
                  // End Timer1 Compare match A interrupt handeler 
@@ -1509,10 +1516,12 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  // Start AUTOMODE routine
                  //
                  
-                 	AUTOMODE:	
-0001fa 0000      		NOP
+                 	AUTOMODE:
+00020c e471      		LDI		TXreg, 'A'					; Notifiy if AUTOMODE thourgh serial connection
+00020d 940e 0263 		CALL	TRNSMT						;
+00020f 0000      		NOP
                  
-0001fb 9508      		RET									; Return
+000210 9508      		RET									; Return
                  
                  //
                  // End AUTOMODE routine
@@ -1529,10 +1538,10 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	M_PWM:	
-0001fc bd33      		OUT 	OCR2, MDCYCLE				; Loading value from DCYCLE to OCR2
-0001fd 2f73      		MOV		TXreg, MDCYCLE				; Transmit DCYCLE
-0001fe 940e 024b 		CALL	TRNSMT 
-000200 9508      		RET									; Return
+000211 bd33      		OUT 	OCR2, MDCYCLE				; Loading value from DCYCLE to OCR2
+000212 2f73      		MOV		TXreg, MDCYCLE				; Transmit DCYCLE
+000213 940e 0263 		CALL	TRNSMT 
+000215 9508      		RET									; Return
                  
                  //
                  // End Motor PWM Dutycycle activator
@@ -1546,10 +1555,10 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	E_PWM:	
-000201 bf4c      		OUT 	OCR0, EDCYCLE				; Loading value from EDCYCLE to OCR0
-000202 2f74      		MOV		TXreg, EDCYCLE				; Transmit ELECTRODUTYCYCLE
-000203 940e 024b 		CALL	TRNSMT 
-000205 9508      		RET									; Return
+000216 bf4c      		OUT 	OCR0, EDCYCLE				; Loading value from EDCYCLE to OCR0
+000217 2f74      		MOV		TXreg, EDCYCLE				; Transmit ELECTRODUTYCYCLE
+000218 940e 0263 		CALL	TRNSMT 
+00021a 9508      		RET									; Return
                  
                  //
                  // End Electromagnet PWM Dutycycle activator routine
@@ -1567,28 +1576,31 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	UPDATE_DUTYCYCLE:
-000206 931f      		PUSH	temp						; Push temp to Stack
-000207 932f      		PUSH	temp2						; Push temp2 to Stack
+00021b 931f      		PUSH	temp						; Push temp to Stack
+00021c 932f      		PUSH	temp2						; Push temp2 to Stack
                  
-000208 e012      		LDI		temp, 2						; Multiply DCYCLE with 2
-000209 9f31      		MUL 	MDCYCLE, temp			
+00021d 2f73      		MOV		TXreg, MDCYCLE				; Notifiy of updating MDCYCLE thourgh serial connection
+00021e 940e 0263 		CALL	TRNSMT						;
+                 
+000220 e012      		LDI		temp, 2						; Multiply DCYCLE with 2
+000221 9f31      		MUL 	MDCYCLE, temp			
                  		
-00020a 2d20      		MOV		temp2, R0					; Store result in temp2
+000222 2d20      		MOV		temp2, R0					; Store result in temp2
                  		
-00020b 9330 0096 		STS		NUM, MDCYCLE				; Divide DCYCLE with 2
-00020d e012      		LDI		temp, 2
-00020e 9310 0095 		STS		DNOM, temp
-000210 940e 021b 		CALL	DIVISION
+000223 9330 0096 		STS		NUM, MDCYCLE				; Divide DCYCLE with 2
+000225 e012      		LDI		temp, 2
+000226 9310 0095 		STS		DNOM, temp
+000228 940e 0233 		CALL	DIVISION
                  	
-000212 9110 0094 		LDS		temp, RESULT				; Add result in temp2 and move to DCYCLE
-000214 0f21      		ADD		temp2, temp
-000215 2f32      		MOV		MDCYCLE, temp2
+00022a 9110 0094 		LDS		temp, RESULT				; Add result in temp2 and move to DCYCLE
+00022c 0f21      		ADD		temp2, temp
+00022d 2f32      		MOV		MDCYCLE, temp2
                  
-000216 940e 01fc 		CALL	M_PWM						; DCYCLE is now updated and is sent to M_PWM (Motor)
+00022e 940e 0211 		CALL	M_PWM						; DCYCLE is now updated and is sent to M_PWM (Motor)
                  
-000218 912f      		POP		temp2						; Push temp2 from Stack
-000219 911f      		POP		temp						; Push temp from Stack
-00021a 9508      		RET									; Return 
+000230 912f      		POP		temp2						; Push temp2 from Stack
+000231 911f      		POP		temp						; Push temp from Stack
+000232 9508      		RET									; Return 
                  
                  //
                  // End Update dutycycle routine
@@ -1603,40 +1615,40 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	DIVISION:					
-00021b 935f      		PUSH	R21							; 8bit division
-00021c 934f      		PUSH	R20
-00021d 931f      		PUSH	temp
-00021e 932f      		PUSH	temp2	
+000233 935f      		PUSH	R21							; 8bit division
+000234 934f      		PUSH	R20
+000235 931f      		PUSH	temp
+000236 932f      		PUSH	temp2	
                  
-00021f 9150 0096 		LDS		R21, NUM
-000221 9140 0095 		LDS		R20, DNOM
+000237 9150 0096 		LDS		R21, NUM
+000239 9140 0095 		LDS		R20, DNOM
                  
-000223 e011      		LDI		temp, 0x01					
-000224 e020      		LDI		temp2, 0x00	
+00023b e011      		LDI		temp, 0x01					
+00023c e020      		LDI		temp2, 0x00	
                  						
                  		DIV:	
-000225 0f55      			LSL		R21							
-000226 1f22      			ROL		temp2						
-000227 1724      			CP		temp2, R20					
-000228 f418      			BRSH	subtr						
-000229 0f11      			LSL		temp						
-00022a f7d0      			BRCC	DIV							
-00022b c005      			RJMP	RETURN						
+00023d 0f55      			LSL		R21							
+00023e 1f22      			ROL		temp2						
+00023f 1724      			CP		temp2, R20					
+000240 f418      			BRSH	subtr						
+000241 0f11      			LSL		temp						
+000242 f7d0      			BRCC	DIV							
+000243 c005      			RJMP	RETURN						
                  											
                  		subtr:	
-00022c 1b24      			SUB		temp2, R20					
-00022d 0f11      			LSL		temp						
-00022e 9513      			INC		temp						
-00022f f7a8      			BRCC	DIV							
-000230 c000      			RJMP	RETURN						
+000244 1b24      			SUB		temp2, R20					
+000245 0f11      			LSL		temp						
+000246 9513      			INC		temp						
+000247 f7a8      			BRCC	DIV							
+000248 c000      			RJMP	RETURN						
                  
                  		RETURN:
-000231 9310 0094 			STS		RESULT, temp
-000233 912f      			POP		temp2
-000234 911f      			POP		temp
-000235 914f      			POP		R20
-000236 915f      			POP		R21
-000237 9508      			RET									; Return
+000249 9310 0094 			STS		RESULT, temp
+00024b 912f      			POP		temp2
+00024c 911f      			POP		temp
+00024d 914f      			POP		R20
+00024e 915f      			POP		R21
+00024f 9508      			RET									; Return
                  //
                  // End Division routine
                  //
@@ -1649,23 +1661,23 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	DELAY:	
-000238 931f      		PUSH	temp						; Push temp from Stack
-000239 932f      		PUSH	temp2						; Push temp2 from Stack
-00023a ef1f      		LDI		temp, 0xFF
-00023b ef2f      		LDI		temp2, 0xFF
+000250 931f      		PUSH	temp						; Push temp from Stack
+000251 932f      		PUSH	temp2						; Push temp2 from Stack
+000252 ef1f      		LDI		temp, 0xFF
+000253 ef2f      		LDI		temp2, 0xFF
                  
                  	D1:		
-00023c 951a      		DEC		temp
-00023d 0000      		NOP	
-00023e f7e9      		BRNE	D1
+000254 951a      		DEC		temp
+000255 0000      		NOP	
+000256 f7e9      		BRNE	D1
                  				
-00023f 952a      		DEC		temp2
-000240 0000      		NOP
-000241 f7d1      		BRNE	D1
+000257 952a      		DEC		temp2
+000258 0000      		NOP
+000259 f7d1      		BRNE	D1
                  
-000242 912f      		POP		temp2						; Pop temp2 from Stack
-000243 911f      		POP		temp						; Pop temp from Stack
-000244 9508      		RET									; Return
+00025a 912f      		POP		temp2						; Pop temp2 from Stack
+00025b 911f      		POP		temp						; Pop temp from Stack
+00025c 9508      		RET									; Return
                  //
                  // End Delay routine
                  //
@@ -1678,13 +1690,13 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	CLRCOMSR:	
-000245 931f      		PUSH	temp						; Push temp to Stack
+00025d 931f      		PUSH	temp						; Push temp to Stack
                  		
-000246 e010      		LDI 	temp, 0x00					; Clear Communication Status Register
-000247 9310 0098 		STS		COMSR, temp
+00025e e010      		LDI 	temp, 0x00					; Clear Communication Status Register
+00025f 9310 0098 		STS		COMSR, temp
                  		
-000249 911f      		POP		temp						; Pop temp from Stack
-00024a 9508      		RET									; Return
+000261 911f      		POP		temp						; Pop temp from Stack
+000262 9508      		RET									; Return
                  
                  //
                  // End Clear communication status register routine
@@ -1699,11 +1711,11 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  
                  	TRNSMT:	
-00024b 9b5d      		SBIS	UCSRA, UDRE					; Wait for UDRE to be ready
-00024c cffe      		RJMP	TRNSMT						
-00024d b97c      		OUT		UDR, TXreg					; Transmit TXreg
+000263 9b5d      		SBIS	UCSRA, UDRE					; Wait for UDRE to be ready
+000264 cffe      		RJMP	TRNSMT						
+000265 b97c      		OUT		UDR, TXreg					; Transmit TXreg
                  		
-00024e 9508      		RET									; Return
+000266 9508      		RET									; Return
                  
                  //
                  // End Transmit routine
@@ -1717,12 +1729,12 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  	
                  	WAIT_FOR_INPUT:
                  
-00024f c003      		RJMP CALC_COMPARE_MATCH_LOW_BYTE
-000250 c015      		RJMP CALC_COMPARE_MATCH_HIGH_BYTE
+000267 c003      		RJMP CALC_COMPARE_MATCH_LOW_BYTE
+000268 c015      		RJMP CALC_COMPARE_MATCH_HIGH_BYTE
                  		 	
                  
-000251 e100      		LDI R16, (1 << OCIE1A)	; Enabling compare match interrupts on Timer1
-000252 bf09      		OUT TIMSK, R16
+000269 e100      		LDI R16, (1 << OCIE1A)	; Enabling compare match interrupts on Timer1
+00026a bf09      		OUT TIMSK, R16
                  
                  //
                  //	End WAIT_FOR_INPUT subroutine  
@@ -1736,29 +1748,29 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  	
                  	CALC_COMPARE_MATCH_LOW_BYTE:
                  
-000253 9100 002c 		LDS R16, TCNT1L	; Getting Timer1 low byte count value
+00026b 9100 002c 		LDS R16, TCNT1L	; Getting Timer1 low byte count value
                  
                  		/* 
                  			Calculate the clock offset until overflow is reached on TCNT1L
                  		 */
-000255 2f20      		MOV R18, R16	; Load an ekstra copy of TCNT1L value into R18 
-000256 ef3f      		LDI R19, 255	; TCNT1L can go to a maximum value of 255, so this is the value we calculate the offset against 
-000257 1b32      		SUB R19, R18	; Subtracting TCNT1L maximum value from the current count value of TCNT1L 
+00026d 2f20      		MOV R18, R16	; Load an ekstra copy of TCNT1L value into R18 
+00026e ef3f      		LDI R19, 255	; TCNT1L can go to a maximum value of 255, so this is the value we calculate the offset against 
+00026f 1b32      		SUB R19, R18	; Subtracting TCNT1L maximum value from the current count value of TCNT1L 
                  		
-000258 9120 0093 		LDS R18, INDRL			; Load the value of the input delay low byte register into R18
-00025a 1732      		CP R19, R18				; If R19 < R18 or said in another way, if INDRL can be added to TCNT1L 
-00025b f010      		BRLO INDRL_NO_OVERFLOW	; without calling overflow, then jump to the subroutine INDRL_NO_OVERFLOW
-00025c 940c 0262 		JMP INDRL_OVERFLOW
+000270 9120 0093 		LDS R18, INDRL			; Load the value of the input delay low byte register into R18
+000272 1732      		CP R19, R18				; If R19 < R18 or said in another way, if INDRL can be added to TCNT1L 
+000273 f010      		BRLO INDRL_NO_OVERFLOW	; without calling overflow, then jump to the subroutine INDRL_NO_OVERFLOW
+000274 940c 027a 		JMP INDRL_OVERFLOW
                  
                  		INDRL_NO_OVERFLOW:
-00025e 0f20      			ADD R18, R16		; Add the value of INDRL to the value of TCNT1L and load it into R18
-00025f 9320 0091 			STS TMPL, R18		; Load the new calculated compare match low value into out temporary storage TMPL		
-000261 9508      			RET
+000276 0f20      			ADD R18, R16		; Add the value of INDRL to the value of TCNT1L and load it into R18
+000277 9320 0091 			STS TMPL, R18		; Load the new calculated compare match low value into out temporary storage TMPL		
+000279 9508      			RET
                  
                  		INDRL_OVERFLOW:
-000262 1b23      			SUB R18, R19		; Subtract the offset value up to TCNT1L maximum from INDRL 
-000263 9320 0091 			STS TMPL, R18		; Load the new found value in R18 into TMPL 
-000265 9508      			RET
+00027a 1b23      			SUB R18, R19		; Subtract the offset value up to TCNT1L maximum from INDRL 
+00027b 9320 0091 			STS TMPL, R18		; Load the new found value in R18 into TMPL 
+00027d 9508      			RET
                  
                  //
                  //	End CALC_COMPARE_MATCH_LOW_BYTE subroutine 
@@ -1771,29 +1783,29 @@ C:\Users\Rasmus Strong Jensen\.ssh\Pole-position\Pole-position\Pole-position.asm
                  //
                  	CALC_COMPARE_MATCH_HIGH_BYTE:
                  
-000266 9100 002d 		LDS R16, TCNT1H	; Getting Timer1 high byte count value
+00027e 9100 002d 		LDS R16, TCNT1H	; Getting Timer1 high byte count value
                  
                  		/* 
                  			Calculate the clock offset until overflow is reached on TCNT1H
                  		 */
-000268 2f20      		MOV R18, R16	; Load an ekstra copy of TCNT1H value into R18 
-000269 ef3f      		LDI R19, 255	; TCNT1H can go to a maximum value of 255, so this is the value we calculate the offset against 
-00026a 1b32      		SUB R19, R18	; Subtracting TCNT1H maximum value from the current count value of TCNT1H 
+000280 2f20      		MOV R18, R16	; Load an ekstra copy of TCNT1H value into R18 
+000281 ef3f      		LDI R19, 255	; TCNT1H can go to a maximum value of 255, so this is the value we calculate the offset against 
+000282 1b32      		SUB R19, R18	; Subtracting TCNT1H maximum value from the current count value of TCNT1H 
                  		
-00026b 9120 0092 		LDS R18, INDRH			; Load the value of the input delay high byte register into R18
-00026d 1732      		CP R19, R18				; If R19 < R18 or said in another way, if INDRH can be added to TCNT1H 
-00026e f010      		BRLO INDRH_NO_OVERFLOW	; without calling overflow, then jump to the subroutine INDRH_NO_OVERFLOW	
-00026f 940c 0262 		JMP INDRL_OVERFLOW
+000283 9120 0092 		LDS R18, INDRH			; Load the value of the input delay high byte register into R18
+000285 1732      		CP R19, R18				; If R19 < R18 or said in another way, if INDRH can be added to TCNT1H 
+000286 f010      		BRLO INDRH_NO_OVERFLOW	; without calling overflow, then jump to the subroutine INDRH_NO_OVERFLOW	
+000287 940c 027a 		JMP INDRL_OVERFLOW
                  
                  		INDRH_NO_OVERFLOW:
-000271 0f20      			ADD R18, R16
-000272 9320 0090 			STS TMPH, R18
-000274 9508      			RET
+000289 0f20      			ADD R18, R16
+00028a 9320 0090 			STS TMPH, R18
+00028c 9508      			RET
                  
                  		INDRH_OVERFLOW:
-000275 1b23      			SUB R18, R19
-000276 9320 0090 			STS TMPH, R18 
-000278 9508      			RET	
+00028d 1b23      			SUB R18, R19
+00028e 9320 0090 			STS TMPH, R18 
+000290 9508      			RET	
                  
                  //
                  //	End CALC_COMPARE_MATCH_LOW_BYTE subroutine 
@@ -1817,7 +1829,7 @@ counted separately from r26..r31 here.
 "ATmega32A" register use summary:
 r0 :   1 r1 :   2 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16:  58 r17:  89 r18:  31 r19:  24 r20:   9 r21:   6 r22:   3 r23:   5 
+r16:  62 r17:  89 r18:  31 r19:  25 r20:   9 r21:   6 r22:   3 r23:  11 
 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 r29:   0 r30:   0 r31:   0 
 x  :   0 y  :   0 z  :   0 
 Registers used: 10 out of 35 (28.6%)
@@ -1828,26 +1840,26 @@ andi  :   7 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0
 brcc  :   2 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   2 brlt  :   0 brmi  :   0 
 brne  :  13 brpl  :   4 brsh  :   1 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :  30 cbi   :   4 cbr   :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :  36 cbi   :   4 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   2 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   3 cpc   :   0 
 cpi   :  10 cpse  :   0 dec   :   2 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   2 inc   :   3 jmp   :   3 
-ld    :   0 ldd   :   0 ldi   :  41 lds   :  17 lpm   :   0 lsl   :   3 
-lsr   :   0 mov   :  19 movw  :   0 mul   :   3 muls  :   0 mulsu :   0 
+ld    :   0 ldd   :   0 ldi   :  48 lds   :  17 lpm   :   0 lsl   :   3 
+lsr   :   0 mov   :  20 movw  :   0 mul   :   3 muls  :   0 mulsu :   0 
 neg   :   0 nop   :   4 or    :   0 ori   :   3 out   :  26 pop   :  12 
 push  :  12 rcall :   0 ret   :  17 reti  :  18 rjmp  :  13 rol   :   1 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   9 sbic  :   1 sbis  :   1 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   1 sec   :   0 seh   :   0 
 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  17 
+sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  19 
 sub   :   5 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
 Instructions used: 38 out of 113 (33.6%)
 
 "ATmega32A" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0004f2    768      0    768   32768   2.3%
+[.cseg] 0x000000 0x000522    816      0    816   32768   2.5%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
